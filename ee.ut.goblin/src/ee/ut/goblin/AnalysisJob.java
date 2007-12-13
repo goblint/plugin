@@ -37,13 +37,14 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
  */
 public class AnalysisJob extends Job {
 	private IProject project;
-	private ArrayList lst, lstI;
+	private ArrayList<String> lst;
+	private ArrayList<IFile> lstI;
 	private GoblinMonitor monitor;
 
     private AnalysisJob(String name) {
         super(name);
-        lst = new ArrayList();
-        lstI = new ArrayList();
+        lst = new ArrayList<String>();
+        lstI = new ArrayList<IFile>();
         setPriority(Job.LONG);
     }
 
@@ -188,7 +189,7 @@ public class AnalysisJob extends Job {
         String[] cmdArray = new String[lst.size()];
         
         for(int i = 0; i < lst.size(); i++){ 
-        	cmdArray[i] = (String) lst.get(i);
+        	cmdArray[i] = lst.get(i);
         }    	
         
         return cmdArray;
@@ -218,10 +219,10 @@ public class AnalysisJob extends Job {
 	}
 	
 	private IFile getFile(String name) {
-		Iterator iter = lstI.iterator();
+		Iterator<IFile> iter = lstI.iterator();
 		
 		while (iter.hasNext()) {
-			IFile f = (IFile) iter.next();
+			IFile f = iter.next();
 			
 			if (f.getName().equals(name))
 				return f;
@@ -233,7 +234,7 @@ public class AnalysisJob extends Job {
     private static final String MARKER_TYPE = "ee.ut.goblin.warning";
 	private void addMarker(IFile file, int lineNumber, String message) {
 		try {
-			Map map = new HashMap(4);
+			Map<String, Integer> map = new HashMap<String, Integer>(4);
 
 			if (lineNumber == -1) {
 				lineNumber = 1;

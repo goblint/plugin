@@ -13,14 +13,14 @@ import ee.ut.goblin.views.TreeLeaf;
 import ee.ut.goblin.views.TreeLoc;
 
 /**
- * Keep analysis data in a form we can query quickly and easely
+ * Keep analysis data in a form we can query quickly and easily
  * 
  * @author kalmera
  */
 public class TreeAnalysisMap {
 	private static final long serialVersionUID = 1L;
 	
-	protected Map 			map = new HashMap(); /*Map<filename,Map<line,TreeLoc>>*/      
+	protected Map<String, Map<Integer, TreeLoc>> map = new HashMap<String, Map<Integer, TreeLoc>>(); /*Map<filename,Map<line,TreeLoc>>*/      
 	
 	/**
 	 * Constructor. Convert analysis data to a more suitable form.
@@ -31,16 +31,16 @@ public class TreeAnalysisMap {
 		TreeLeaf[] nodes = data.getChildren();
 
 		// split data locations by files
-		Map fileMap; /*<filename,LikedList<TreeLoc>*/
+		Map<String, LinkedList<TreeLoc>> fileMap; /*<filename,LikedList<TreeLoc>*/
 		fileMap = splitByFilename(nodes);
 		
 		// split file data locations by lines 
-		Set files = fileMap.keySet();
-		Iterator it = files.iterator();
+		Set<String> files = fileMap.keySet();
+		Iterator<String> it = files.iterator();
 		while(it.hasNext()){
-			String key = (String) it.next();
-			// create logical map: line -> TreeLoc  NB! may create addidional line info 
-			map.put(key, splitByLogicalLine((LinkedList)fileMap.get(key)));
+			String key = it.next();
+			// create logical map: line -> TreeLoc  NB! may create additional line info 
+			map.put(key, splitByLogicalLine(fileMap.get(key)));
 		}
 	}
 	
@@ -53,7 +53,7 @@ public class TreeAnalysisMap {
 	 */
 	public TreeLoc getAnalysis(String file, int line){
 		// try to get data for file
-		Map lns = (Map)map.get(file);
+		Map<Integer,TreeLoc> lns = map.get(file);
 
 		if (lns==null){
 			return null;
@@ -62,7 +62,7 @@ public class TreeAnalysisMap {
 		// get data for line in our file
 		Integer key = new Integer(line);
 		if (lns.containsKey(key)){
-			return (TreeLoc)lns.get(key);
+			return lns.get(key);
 		}else {
 			return null;
 		}
@@ -70,8 +70,8 @@ public class TreeAnalysisMap {
 	/*
 	 * produce mapping: line nr -> relevant data (TreeLoc) 
 	 */
-	private static Map splitByLogicalLine(LinkedList nodes){
-		HashMap lineMap = new HashMap(); /*<Integer,TreeLoc>*/
+	private static Map<Integer, TreeLoc> splitByLogicalLine(LinkedList<TreeLoc> nodes){
+		HashMap<Integer, TreeLoc> lineMap = new HashMap<Integer, TreeLoc>(); /*<Integer,TreeLoc>*/
 		
 		// Sort input by line number. We need earlier (< line nr)
 		// state first.
@@ -79,9 +79,9 @@ public class TreeAnalysisMap {
 
 		int lastln = -1;
 		String cur_fun = "";
-		Iterator it = nodes.iterator();
+		Iterator<TreeLoc> it = nodes.iterator();
 		while (it.hasNext()){
-			TreeLoc tl = (TreeLoc)it.next();
+			TreeLoc tl = it.next();
 			
 			if (cur_fun.equals(tl.getFunction())){
 				// same data applies within one function 
@@ -103,37 +103,31 @@ public class TreeAnalysisMap {
 	/*
 	 * Smaller line number is less than bigger line number ...
 	 */
-	public static Comparator compareLocByLine(){
-		return new Comparator() {
-			public int compare(Object o1, Object i1){
-				if (!(o1 instanceof TreeLoc && i1 instanceof TreeLoc)){
-					return 0;
-				}
-				TreeLoc i = (TreeLoc)i1;
-				TreeLoc o = (TreeLoc)o1;
-				
+	public static Comparator<TreeLoc> compareLocByLine(){
+		return new Comparator<TreeLoc>() {
+			public int compare(TreeLoc o, TreeLoc i){
 				return o.getLine() - i.getLine();		
 			}
 		};
 	}
 	
 	/*
-	 * prioduce mapping: file name ->  data
+	 * produce mapping: file name ->  data
 	 */
-	private static Map splitByFilename(TreeLeaf[] nodes){
-		HashMap fileMap = new HashMap(); /*<filename,LikedList<TreeLoc>*/
+	private static Map<String, LinkedList<TreeLoc>> splitByFilename(TreeLeaf[] nodes){
+		HashMap<String, LinkedList<TreeLoc>> fileMap = new HashMap<String, LinkedList<TreeLoc>>(); /*<filename,LikedList<TreeLoc>*/
 		
 		for (int i = 0; i < nodes.length; ++i){
 			if (nodes[i] instanceof TreeLoc ){
 				TreeLoc tl = (TreeLoc) nodes[i];
 				String key = tl.getFilename();
 				
-				LinkedList l;
+				LinkedList<TreeLoc> l;
 				if  (fileMap.containsKey(key)) {
-					l = (LinkedList) fileMap.get(key);
+					l = fileMap.get(key);
 					l.add(tl);
 				} else {
-					l = new LinkedList();
+					l = new LinkedList<TreeLoc>();
 					l.add(tl);
 					fileMap.put(key, l);
 				}

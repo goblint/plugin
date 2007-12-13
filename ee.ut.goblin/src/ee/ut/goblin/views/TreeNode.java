@@ -18,16 +18,16 @@ import org.xml.sax.Attributes;
  */
 public class TreeNode extends TreeLeaf {
 	
-    private ArrayList children;
+    private ArrayList<TreeLeaf> children;
 
 	public TreeNode(Attributes attr) {
 		super(attr);
-		children = new ArrayList();
+		children = new ArrayList<TreeLeaf>();
 	}
     
     public TreeNode (String name) {
     	super(name);
-    	children = new ArrayList();
+    	children = new ArrayList<TreeLeaf>();
     }
 
     public void addChild(TreeLeaf child) {
@@ -41,7 +41,7 @@ public class TreeNode extends TreeLeaf {
     }
 
     public TreeLeaf[] getChildren() {
-        return (TreeLeaf[]) children.toArray(new TreeLeaf[children.size()]);
+        return children.toArray(new TreeLeaf[children.size()]);
     }
 
     public boolean hasChildren() {

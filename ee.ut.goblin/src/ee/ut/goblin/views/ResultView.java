@@ -407,7 +407,7 @@ public class ResultView extends ViewPart implements ISelectionListener {
  * @author kalmera
  */
 class TreeState {
-	private ArrayList o = new ArrayList();
+	private ArrayList<TreeState> o = new ArrayList<TreeState>();
 	private String n;
 	
 	TreeState(){
@@ -419,10 +419,10 @@ class TreeState {
 	}
 	
 	public TreeState in(String s){
-		java.util.Iterator it = o.iterator();
+		java.util.Iterator<TreeState> it = o.iterator();
 		if (s!=null)
 			while (it.hasNext()){
-				TreeState obj = (TreeState) it.next();
+				TreeState obj = it.next();
 				if (s.equals(obj.n)) {
 					return (TreeState) obj;
 				}
@@ -443,9 +443,9 @@ class TreeState {
 		if (s==null)
 			return false;
 		
-		java.util.Iterator it = o.iterator();
+		java.util.Iterator<TreeState> it = o.iterator();
 		while (it.hasNext()){
-			TreeState obj = (TreeState) it.next();
+			TreeState obj = it.next();
 			if (s.equals(obj.n)) {
 				return true;
 			}

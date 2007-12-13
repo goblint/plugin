@@ -72,10 +72,10 @@ public class TreeLeaf implements IAdaptable {
     	return toString();
     }
     
-    public Object getAdapter(Class key) {
-        return null;
-    }
-
+    
+	public Object getAdapter(Class adapter) {
+		return null;
+	}
 
 	public Image getImage() {
 		String imageKey = ISharedImages.IMG_OBJS_INFO_TSK;	

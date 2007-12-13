@@ -16,11 +16,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author vesal
  */
 public class XMLHandler extends DefaultHandler {
-    private Stack stack;
+    private Stack<TreeLeaf> stack;
 
     public XMLHandler(TreeNode root) {
         super();
-        stack = new Stack();
+        stack = new Stack<TreeLeaf>();
         stack.push(root);
     }
     

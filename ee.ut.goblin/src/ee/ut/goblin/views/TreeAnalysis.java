@@ -13,16 +13,16 @@ import java.util.Collection;
  */
 public class TreeAnalysis extends TreeNode {
 	
-	private Map map;
+	private Map<TreeLeaf, TreeLeaf> map;
 	
 	public TreeAnalysis() {
 		super("Analysis");
-		map = new HashMap();
+		map = new HashMap<TreeLeaf, TreeLeaf>();
 	}
 	
 	public TreeLeaf[] getChildren() {
-		Collection v = map.values();
-		return (TreeLeaf[]) v.toArray(new TreeLeaf[v.size()]);
+		Collection<TreeLeaf> v = map.values();
+		return v.toArray(new TreeLeaf[v.size()]);
 	}
 	
 	public boolean hasChildren() {
@@ -59,6 +59,6 @@ public class TreeAnalysis extends TreeNode {
 	}
 	
 	public TreeLeaf get(TreeLeaf key) {
-		return (TreeLeaf)map.get(key);
+		return map.get(key);
 	}
 }
