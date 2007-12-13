@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="ee.ut.goblin"
+   name="Goblin Plug-in"
+   version="0.5.3"
+   provider-name="University of Tartu"
+   class="ee.ut.goblin.GoblinPlugin">
+
+   <runtime>
+      <library name="goblin.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.forms"/>
+   </requires>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.c"
+            id="ee.ut.goblin.objectContribution">
+         <action
+               enablesFor="1"
+               label="Run the Goblin"
+               icon="icons/FuchikomaPurple.gif"
+               class="ee.ut.goblin.actions.RunGoblinAction"
+               id="ee.ut.goblin.RunGoblinAction">
+           <enablement>
+               <and>
+                  <objectState
+                        value="c"
+                        name="extension"/>
+                  <or>
+                     <objectClass name="org.eclipse.core.resources.IFile"/>
+                     <objectClass name="org.eclipse.cdt.core.model.ITranslationUnit"/>
+                  </or>
+               </and>
+            </enablement>
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            targetID="org.eclipse.ui.console.ConsoleView"
+            id="ee.ut.goblin.consoleViewContribution">
+         <action
+               toolbarPath="outputGroup"
+               label="Remove Consoles"
+               icon="icons/FuchikomaPurple.gif"
+               tooltip="Removes the Goblin Consoles"
+               class="ee.ut.goblin.actions.DeleteConsoleAction"
+               id="ee.ut.goblin.removeAction"/>
+      </viewContribution>
+      <viewContribution
+            id="ee.ut.goblin.problemsViewContribution"
+            targetID="org.eclipse.ui.views.ProblemView">
+         <action
+               class="ee.ut.goblin.actions.RemoveMarkersAction"
+               icon="icons/FuchikomaPurple.gif"
+               id="ee.ut.goblin.removeMarkersAction"
+               label="Remove analysis warnings"
+               style="push"
+               toolbarPath="goblinGroup"
+               tooltip="Remove warnings created by the goblin."/>
+      </viewContribution>
+      <viewContribution
+            id="ee.ut.goblin.problemsViewContribution"
+            targetID="ee.ut.goblin.views.ResultView">
+         <action
+               class="ee.ut.goblin.actions.RemoveAnalysisResultAction"
+               icon="icons/FuchikomaPurple.gif"
+               id="ee.ut.goblin.removeAnalysisAction"
+               label="Remove analysis result"
+               style="push"
+               toolbarPath="goblinGroup"
+               tooltip="Delete analysis result "/>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="ee.ut.goblin.GoblinPreferencePage"
+            category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
+            name="Goblin"
+            id="ee.ut.goblin.GoblinPreferencePage"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Goblin Views"
+            id="ee.ut.goblin"/>
+      <view
+            class="ee.ut.goblin.views.ResultView"
+            icon="icons/FuchikomaPurple.gif"
+            category="ee.ut.goblin"
+            name="Analysis Result"
+            id="ee.ut.goblin.views.ResultView"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.cdt.ui.CPerspective">
+         <view
+               id="ee.ut.goblin.views.ResultView"
+               ratio="1"
+               relationship="bottom"
+               relative="org.eclipse.ui.views.ResourceNavigator"
+               visible="true"/>
+      </perspectiveExtension>
+   </extension>
+      <extension
+         id="warning"
+         name="Analysis Warning"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+      <extension
+            point="org.eclipse.ui.propertyPages">
+         <page
+               adaptable="true"
+               class="ee.ut.goblin.GoblinPropertyPage"
+               id="ee.ut.gobliee.ut.goblin.GoblinPropertyPage"
+               name="Goblin"
+               nameFilter="*"
+               objectClass="org.eclipse.cdt.core.model.ICProject">
+         </page>
+               	<filter
+              	name="projectPersistentProperty"
+              	value="org.eclipse.team.core.repository=org.eclipse.cdt.core.CProjectNature">
+              	</filter>
+       </extension>
+</plugin>

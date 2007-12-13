@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/goblin_0.5.0.jar" id="goblin" version="0.5.0">
+      <category name="Goblin"/>
+   </feature>
+   <feature url="features/goblin_0.5.1.jar" id="goblin" version="0.5.1">
+      <category name="Goblin"/>
+   </feature>
+   <feature url="features/goblin_0.5.2.jar" id="goblin" version="0.5.2">
+      <category name="Goblin"/>
+   </feature>
+   <feature url="features/goblin_0.5.3.jar" id="goblin" version="0.5.3">
+      <category name="Goblin"/>
+   </feature>
+   <category-def name="Goblin" label="goblin"/>
+</site>
