@@ -136,7 +136,7 @@
          <page
                adaptable="true"
                class="ee.ut.goblin.GoblinPropertyPage"
-               id="ee.ut.gobliee.ut.goblin.GoblinPropertyPage"
+               id="ee.ut.goblin.GoblinPropertyPage"
                name="Goblin"
                nameFilter="*"
                objectClass="org.eclipse.cdt.core.model.ICProject">
