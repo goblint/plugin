@@ -31,7 +31,7 @@ public final class GoblinPropertyPage extends PropertyPage {
 	public static final String P_ANALYSE_ALLFUNS = "goblinAnalyseAllFunsProperty";
 	public static final String P_EXTRA_PARAMETERS = "goblinExtraParametersProperty";
 	
-	private static final String[][] AVALIABLE_ANALYSES = { {"Constant","cpa"}, {"Int constant","intcpa"}, {"Base","base"}, {"Mutex","mutex"}};
+	private static final String[][] AVALIABLE_ANALYSES = { {"Mutex","mutex"}, {"No path","no_path"}, {"Base","base"} };
 	private static final int DEFAULT_ANALYSIS = 0;
 	
 	private Combo analysis_combo;
