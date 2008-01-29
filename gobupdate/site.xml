@@ -12,5 +12,8 @@
    <feature url="features/goblin_0.5.3.jar" id="goblin" version="0.5.3">
       <category name="Goblin"/>
    </feature>
+   <feature url="features/goblin_0.5.4.jar" id="goblin" version="0.5.4">
+      <category name="Goblin"/>
+   </feature>
    <category-def name="Goblin" label="goblin"/>
 </site>

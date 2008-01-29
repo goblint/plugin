@@ -3,7 +3,7 @@
 <plugin
    id="ee.ut.goblin"
    name="Goblin Plug-in"
-   version="0.5.3"
+   version="0.5.4"
    provider-name="University of Tartu"
    class="ee.ut.goblin.GoblinPlugin">
 

@@ -60,6 +60,8 @@ public class AnalysisJob extends Job {
      * @see org.eclipse.core.internal.jobs.InternalJob#run(org.eclipse.core.runtime.IProgressMonitor)
      */
     protected IStatus run(IProgressMonitor mon) {
+    	Process proc = null;
+    	
     	monitor = new GoblinMonitor(mon);
         monitor.setTaskName("Launching the goblin");
         
@@ -72,12 +74,10 @@ public class AnalysisJob extends Job {
         	String[] envp = null;
         	File     dir  = project.getLocation().toFile();
 
-            Process proc = Runtime.getRuntime().exec(cmds, envp, dir);
+            proc = Runtime.getRuntime().exec(cmds, envp, dir);
             
             if (monitor.isCanceled()) {
-                proc.destroy();
-                monitor.done();
-                return Status.CANCEL_STATUS;
+                throw new InterruptedException();
             }
 
             monitor.setTaskName("Analysing");
@@ -87,7 +87,11 @@ public class AnalysisJob extends Job {
             return new Status(IStatus.ERROR, "ee.ut.goblin", 98, "I/O problems", e);
         } catch (CoreException e) {
             return new Status(IStatus.ERROR,"ee.ut.goblin", 98, "Core exception", e);
-        }
+        } catch (InterruptedException e) {
+            proc.destroy();
+            monitor.done();
+        	return Status.CANCEL_STATUS;
+		}
 
         monitor.done();
 
@@ -97,7 +101,7 @@ public class AnalysisJob extends Job {
         return Status.OK_STATUS;
     }
     
-    private void analyseIO(Process proc) throws IOException {
+    private void analyseIO(Process proc) throws IOException, InterruptedException {
         BufferedReader goblinStream = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         BufferedReader goblerrStream = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
@@ -105,6 +109,11 @@ public class AnalysisJob extends Job {
     	
         String line;
         while ((line = goblinStream.readLine()) != null) {
+            
+        	if (monitor.isCanceled()) {
+                throw new InterruptedException();
+            }
+            
         	if (line.startsWith("WARNING")) {
         		String[] parts = line.split(" /-/ ");
         		
